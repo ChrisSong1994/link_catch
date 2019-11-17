@@ -1,0 +1,25 @@
+{
+  "name": "link_catch",
+  "version": "1.0.0",
+  "description": "专门获取天下足球网的下载链接的爬虫",
+  "main": "index.js",
+  "scripts": {
+    "debug": "node inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/song111/link_catch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/song111/link_catch/issues"
+  },
+  "homepage": "https://github.com/song111/link_catch#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "excel-export": "^0.5.1",
+    "iconv-lite": "^0.5.0",
+    "request": "^2.88.0"
+  }
+}
