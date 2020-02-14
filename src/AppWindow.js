@@ -5,6 +5,8 @@ class AppWindow extends BrowserWindow {
     const basicConfig = {
       width: 1440,
       height: 760,
+      minWidth:960,
+      minHight:540,
       webPreferences: {
         nodeIntegration: true
       },
