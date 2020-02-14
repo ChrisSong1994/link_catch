@@ -16,8 +16,7 @@ const createWindow = () => {
     height: 1200
   }
   // 打开文件或url
-  const urlLocation = isDev
-    ? 'http://localhost:3000'
+  const urlLocation = isDev ? 'http://localhost:3000'
     : url.format({
       pathname: path.join(__dirname, './build/index.html'),
       protocol: 'file',
@@ -37,14 +36,17 @@ const createWindow = () => {
 app.on('ready', () => {
   // 创建窗口
   createWindow()
-  
+
   // 监听渲染进程获取url 动作
   ipcMain.on('catch-url', (event, url) => {
+    event.reply('catch-state', true)
     urlCatch(url).then(data => {
       global.sharedObject = { linkData: data }
       event.reply('catch-data', true)
+      event.reply('catch-state', false)
     }).catch(err => {
       event.reply('catch-data', false)
+      event.reply('catch-state', false)
     })
   })
 })
