@@ -23,10 +23,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "onlyEle": "nodemon --watch main.js --watch src/menuTemplate.js --exec \"electron .\"",
-    "dev": "concurrently \"wait-on http://localhost:3000 && electron . \" \"cross-env BROWSER=none npm start\" "
+    "dev": "concurrently \"wait-on http://localhost:3000 && electron --inspect-brk . \" \"cross-env BROWSER=none npm start\" "
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,22 +1,16 @@
-import React, { useState } from 'react'
-import './App.css'
+import React from 'react'
 import UrlInput from './components/UrlInput'
+import ReastTable from './components/ResultTable'
+import './App.css'
+
 
 function App() {
-  const [inputUrl, setInputUrl] = useState('')
-  // const [dataList,setDataList]=useState([])
-
-  const handleSearch = url => {
-    setInputUrl(url)
-    
-  }
   return (
     <div className="App">
-      <header className="App-header">
-        <span aria-label="cat" role="img">
-          🐱
-        </span>
-        <UrlInput value={inputUrl} onSearch={handleSearch} />
+      <header className="App-content">
+        <span aria-label="cat" role="img"> 🐱 </span>
+        <UrlInput  />
+        <ReastTable />
       </header>
     </div>
   )
