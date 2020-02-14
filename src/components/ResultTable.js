@@ -26,12 +26,7 @@ const ResultTable = () => {
     useEffect(() => {
         ipcRenderer.on('catch-data', (event, res) => {
             const shareObject = remote.getGlobal('sharedObject')
-            if (res) {
-                setLinkData(shareObject.linkData.map((item, i) => {
-                    item.key = i
-                    return item
-                }))
-            }
+            if (res) setLinkData(shareObject.linkData)
         })
 
         ipcRenderer.on('catch-state', (even, bool) => {
