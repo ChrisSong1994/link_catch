@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table } from 'antd'
+import { Table, Button } from 'antd'
 
 const { remote, ipcRenderer } = window.require('electron')
 const columns = [
@@ -22,6 +22,7 @@ const ResultTable = () => {
   const [linkData, setLinkData] = useState([])
   const [loading, setLoading] = useState(false)
   const [scrollHight, setScrollHeight] = useState(500)
+  const [selectedLink, setSelectedLink] = useState([])
 
   useEffect(() => {
     setScrollHeight(document.body.offsetHeight - 300)
@@ -45,12 +46,9 @@ const ResultTable = () => {
   }, [])
 
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
+    selectedRowKeys: selectedLink,
+    onChange: (selectedRowKeys) => {
+      setSelectedLink(selectedRowKeys.join(','))
     },
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -60,7 +58,6 @@ const ResultTable = () => {
 
   return (
     <div style={{ width: '80%' }}>
-      {/* <Button type="primary"> 复制 </Button> */}
       <div style={{ background: '#fff' }}>
         <Table
           bordered
@@ -70,14 +67,21 @@ const ResultTable = () => {
           columns={columns}
           dataSource={linkData}
           pagination={{
-            total:linkData.length,
-            defaultPageSize:20,
-            showSizeChanger:true,
-            showTotal:(total)=>{
+            total: linkData.length,
+            defaultPageSize: 20,
+            showSizeChanger: true,
+            showTotal: (total) => {
               return `共${total}条`
             }
           }}
         />
+        <div>
+          <Button type="primary">Primary</Button>
+          <Button>Default</Button>
+          <Button type="dashed">Dashed</Button>
+          <Button type="danger">Danger</Button>
+          <Button type="link">Link</Button>
+        </div>
       </div>
     </div>
   )

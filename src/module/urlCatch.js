@@ -42,7 +42,7 @@ const catchLink = async (url) => {
             url: url,
             key: path.parse(url).name
           };
-        });
+        }).filter(item => !!item.url);
         return resolve(dataList)
       } catch (err) {
         return reject(err)
