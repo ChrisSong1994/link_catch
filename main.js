@@ -27,7 +27,7 @@ const createWindow = () => {
 
   // 创建主窗口
   mainWindow = new AppWindow(mainWindowConfig, urlLocation)
-  // 打开开发者工具。
+  // 打开开发者工具
   mainWindow.webContents.openDevTools()
   // 当 window 被关闭，这个事件会被触发
   mainWindow.on('closed', () => {

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button } from 'antd'
+import _ from  'lodash' 
 
-const { remote, ipcRenderer } = window.require('electron')
+const { remote, ipcRenderer ,clipboard} = window.require('electron')
 const columns = [
   {
     title: '标题',
@@ -19,17 +20,17 @@ const columns = [
 
 const ResultTable = () => {
   // 声明一个新的叫做 “count” 的 state 变量
-  const [linkData, setLinkData] = useState([])
+  const [linksData, setLinksData] = useState([])
   const [loading, setLoading] = useState(false)
   const [scrollHight, setScrollHeight] = useState(500)
-  const [selectedLink, setSelectedLink] = useState([])
+  const [selectedLinkKeys, setSelectedLinkKeys] = useState([])
 
   useEffect(() => {
-    setScrollHeight(document.body.offsetHeight - 300)
+    setScrollHeight(document.body.offsetHeight - 350)
 
     ipcRenderer.on('catch-data', (event, res) => {
       const shareObject = remote.getGlobal('sharedObject')
-      if (res) setLinkData(shareObject.linkData)
+      if (res) setLinksData(shareObject.linkData)
     })
 
     ipcRenderer.on('catch-state', (even, bool) => {
@@ -37,7 +38,7 @@ const ResultTable = () => {
     })
 
     ipcRenderer.on('resize', () => {
-      setScrollHeight(document.body.offsetHeight - 300)
+      setScrollHeight(document.body.offsetHeight - 350)
     })
 
     return () => {
@@ -45,29 +46,47 @@ const ResultTable = () => {
     }
   }, [])
 
+  const copyLinksToClipboard=()=>{
+    const selectedLinks= selectedLinkKeys.reduce((result,key)=>{
+      const linkData=_.find(linksData,{key})
+     if(linkData&&linkData.url){
+       result.push(linkData.url)
+     }
+     return result
+    },[])
+    clipboard.writeText(selectedLinks.join('\n'))
+    console.log(selectedLinks)
+  }
+
   const rowSelection = {
-    selectedRowKeys: selectedLink,
+    selectedRowKeys: selectedLinkKeys,
     onChange: (selectedRowKeys) => {
-      setSelectedLink(selectedRowKeys.join(','))
-    },
-    getCheckboxProps: record => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name
-    })
+      setSelectedLinkKeys(selectedRowKeys)
+    }
   }
 
   return (
-    <div style={{ width: '80%' }}>
-      <div style={{ background: '#fff' }}>
+    <div className="result-table-wrap" >
+      <div className="result-table-content" >
+        <div className="result-table-button">
+          <Button 
+          type="primary"  
+          disabled={!selectedLinkKeys.length}
+          onClick={copyLinksToClipboard}>复制连接</Button>
+          <Button 
+          type="primary" 
+          disabled={!selectedLinkKeys.length}>导出Excel</Button>
+        </div>
+
         <Table
           bordered
           loading={loading}
           scroll={{ y: scrollHight }}
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={linkData}
+          dataSource={linksData}
           pagination={{
-            total: linkData.length,
+            total: linksData.length,
             defaultPageSize: 20,
             showSizeChanger: true,
             showTotal: (total) => {
@@ -75,13 +94,7 @@ const ResultTable = () => {
             }
           }}
         />
-        <div>
-          <Button type="primary">Primary</Button>
-          <Button>Default</Button>
-          <Button type="dashed">Dashed</Button>
-          <Button type="danger">Danger</Button>
-          <Button type="link">Link</Button>
-        </div>
+
       </div>
     </div>
   )

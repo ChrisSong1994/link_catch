@@ -1,4 +1,11 @@
 @import '~antd/dist/antd.css';
+
+/* 组件样式覆盖 */
+.ant-table-pagination{
+  margin: 16px 16px;
+} 
+
+/* 内容样式 */
 .App {
   text-align: center;
 }
@@ -14,10 +21,19 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.App-content .result-table-wrap{
+  width: 80%;
 }
 
-.ant-table-pagination{
-  margin: 16px 16px;
-} 
+.App-content .result-table-content{
+  background: #fff;
+}
+
+.App-content  .result-table-button{
+text-align: left;
+padding: 10px;
+}
+
+.App-content  .result-table-button > button{
+  margin: 0 10px;
+}
