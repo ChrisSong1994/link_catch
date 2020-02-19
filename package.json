@@ -15,6 +15,7 @@
     "cheerio": "^1.0.0-rc.3",
     "iconv-lite": "^0.5.1",
     "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.1",
@@ -27,7 +28,8 @@
     "eject": "react-scripts eject",
     "onlyEle": "nodemon --watch main.js --watch src/menuTemplate.js --exec \"electron .\"",
     "debug": "concurrently \"wait-on http://localhost:3000 && electron --inspect-brk . \" \"cross-env BROWSER=none npm start\" ",
-    "dev": "concurrently \"wait-on http://localhost:3000 && electron . \" \"cross-env BROWSER=none npm start\" "
+    "dev": "concurrently \"wait-on http://localhost:3000 && electron . \" \"cross-env BROWSER=none npm start\" ",
+    "push-master": "sh push-master.sh"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,7 +53,9 @@
     "electron": "^8.0.0",
     "electron-is-dev": "^1.1.0",
     "electron-react-devtools": "^0.5.3",
+    "electron-store": "^5.1.0",
     "nodemon": "^2.0.2",
+    "suger": "^1.0.9",
     "wait-on": "^4.0.0"
   }
 }

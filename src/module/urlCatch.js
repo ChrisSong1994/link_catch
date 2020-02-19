@@ -1,7 +1,7 @@
 const request = require('request-promise')
 const cheerio = require("cheerio");
 const iconv = require("iconv-lite");
-const path = require("path")
+const path = window.require("path")
 
 function to(promise) {
   return promise
