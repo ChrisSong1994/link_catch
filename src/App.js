@@ -5,17 +5,10 @@ import LinkTable from './components/LinkTable'
 import DownloadList from './components/DownloadList'
 import { Drawer, Button, Icon } from 'antd'
 const { dialog } = window.require('electron').remote
-// const StreamDownload = require('./module/streamDownload')
+const StreamDownload = require('./module/streamDownload')
 const urlCatch = require('./module/urlCatch')
 
-// new StreamDownload({
-//   patchUrl:
-// 'http://ssl.cdn.turner.com/nba/big/nba/wsc/2020/02/13/34B2D2AED5A3701EDAC035BB15F6B4E72233CBDE.nba_3075160_1920x1080_5904.mp4',
-//   baseDir: '/Users/songjun/学习/github/link_catch',
-//   fileName: '1.mp4'
-// }).downloadFile((type) => {
-//   console.log(type)
-// })
+// http://www.txzqw.me/read-htm-tid-357213.html
 
 const App = () => {
   const [linksData, setLinksData] = useState([])
@@ -38,14 +31,26 @@ const App = () => {
 
   // 下载视频
   const handleDownload = data => {
-    console.log(data,dialog)
-    dialog.showOpenDialog({
-      properties:['openDirectory'],
-      message:'请选择下载路径'
-    }).then(result=>{
-      console.log(result)
-    })
-   
+    dialog
+      .showOpenDialog({
+        properties: ['openDirectory'],
+        message: '请选择下载路径'
+      })
+      .then(result => {
+        const downloadDir = result.filePaths[0]
+        console.log(data, downloadDir)
+        debugger
+        for (let downloadInfo of data) {
+          new StreamDownload({
+            id:downloadInfo.key,
+            patchUrl: downloadInfo.url,
+            baseDir: downloadDir,
+            fileName: `${downloadInfo.title}.mp4`
+          }).downloadFile(type => {
+            // console.log(type)
+          })
+        }
+      })
   }
 
   return (
@@ -77,7 +82,7 @@ const App = () => {
         onClose={() => setDrawerVisible(false)}
         getContainer={false}
       >
-       <DownloadList/>
+        <DownloadList />
       </Drawer>
     </div>
   )

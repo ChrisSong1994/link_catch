@@ -14,9 +14,7 @@ class AppWindow extends BrowserWindow {
       backgroundColor: '#efefef'
     }
     const finalConfig = { ...basicConfig, ...config }
-    debugger
     super(finalConfig)
-    console.log(finalConfig)
     this.loadURL(urlLocation)
     this.once('ready-to-show', () => {
       this.show()

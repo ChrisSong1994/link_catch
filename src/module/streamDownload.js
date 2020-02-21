@@ -1,15 +1,26 @@
-const fs = window.require('fs')
-const path = window.require('path')
+let path=null
+let fs=null ;
+try{
+   fs =  window.require('fs') 
+   path =window.require('path') 
+}catch(err){
+   fs =  require('fs')
+   path = require('path')
+}
 const request = require('request')
 
 class StreamDownload {
-  constructor({ patchUrl, baseDir, fileName }) {
+  constructor({ id, patchUrl, baseDir, fileName }) {
+    this.id = id
     this.patchUrl = patchUrl
     this.baseDir = baseDir
     this.fileName = fileName
+    this.status = '0' // 在排队：0 进行中：1  暂停 ：2  完成：3 默认在排队中
     this.percentage = 0
     this.downloadCallback = null
     this.error = null
+    this.receivedBytes = 0
+    this.totalBytes = 0
   }
 
   /**计算进度
@@ -18,7 +29,7 @@ class StreamDownload {
    * */
   showProcess(received, total) {
     this.percentage = ((received * 100) / total).toFixed(2) // 保留两位小数
-    console.log(`${this.percentage}%`)
+    console.log(`${this.fileName}:${this.percentage}%`)
     this.downloadCallback('process', this.percentage)
   }
 
@@ -33,7 +44,7 @@ class StreamDownload {
 
     let receivedBytes = 0
     let totalBytes = 0
-    // 使用流数据获取连接数据
+    // 使用流数据获取连接数据   // 后期改进需要进行异步执行
     const reqStream = request({ method: 'GET', uri: this.patchUrl })
     // 创建一个可写入流
     const outStream = fs.createWriteStream(
@@ -59,10 +70,12 @@ class StreamDownload {
     })
 
     reqStream.on('end', () => {
-      debugger
       this.downloadCallback('finished')
     })
   }
+
+  // 暂停下载
+  pauseDownloadFile() {}
 }
 
 module.exports = StreamDownload
