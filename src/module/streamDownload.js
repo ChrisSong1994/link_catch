@@ -1,11 +1,11 @@
-let path=null
-let fs=null ;
-try{
-   fs =  window.require('fs') 
-   path =window.require('path') 
-}catch(err){
-   fs =  require('fs')
-   path = require('path')
+let path = null
+let fs = null
+try {
+  fs = window.require('fs')
+  path = window.require('path')
+} catch (err) {
+  fs = require('fs')
+  path = require('path')
 }
 const request = require('request')
 
@@ -30,7 +30,13 @@ class StreamDownload {
   showProcess(received, total) {
     this.percentage = ((received * 100) / total).toFixed(2) // 保留两位小数
     console.log(`${this.fileName}:${this.percentage}%`)
-    this.downloadCallback('process', this.percentage)
+    this.downloadCallback &&
+      this.downloadCallback('process', { process: this.percentage })
+  }
+
+  // 回调
+  registerCallback(callback) {
+    this.downloadCallback = callback
   }
 
   /** 下载文件
@@ -39,9 +45,7 @@ class StreamDownload {
    * @param {String} fileName  下载文件名称
    * @param {Function}  callback  下载回调函数
    * */
-  downloadFile(callback) {
-    this.downloadCallback = callback // 注册回调函数
-
+  downloadFile() {
     let receivedBytes = 0
     let totalBytes = 0
     // 使用流数据获取连接数据   // 后期改进需要进行异步执行
@@ -60,7 +64,8 @@ class StreamDownload {
     //  监听错误信息
     reqStream.on('error', err => {
       this.error = err
-      this.downloadCallback('error', this.error)
+      this.downloadCallback &&
+        this.downloadCallback('error', { err: this.error })
     })
 
     // 监听数据响应
@@ -70,7 +75,7 @@ class StreamDownload {
     })
 
     reqStream.on('end', () => {
-      this.downloadCallback('finished')
+      this.downloadCallback && this.downloadCallback('finished')
     })
   }
 

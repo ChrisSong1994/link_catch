@@ -24,6 +24,7 @@ const LinkTable = ({ data, loading, onDownload }) => {
   const [selectedLinkKeys, setSelectedLinkKeys] = useState([])
   const [selectedLinks, setSelectedLinks] = useState([])
 
+
   useEffect(() => {
     setScrollHeight(document.body.offsetHeight - 350)
     ipcRenderer.on('resize', () => {

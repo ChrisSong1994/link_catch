@@ -4,6 +4,7 @@ import UrlInput from './components/UrlInput'
 import LinkTable from './components/LinkTable'
 import DownloadList from './components/DownloadList'
 import { Drawer, Button, Icon } from 'antd'
+import _ from 'lodash'
 const { dialog } = window.require('electron').remote
 const StreamDownload = require('./module/streamDownload')
 const urlCatch = require('./module/urlCatch')
@@ -14,7 +15,8 @@ const App = () => {
   const [linksData, setLinksData] = useState([])
   const [loading, setLoading] = useState(false)
   const [isDrawerVisible, setDrawerVisible] = useState(false)
-
+  const [downloadStack, setDownloadStack] = useState([]) // 用一个数组作为下载队列
+  const [downloadingId,setDownloadingId] =useState('') // 设置选中下载的id
   // 查询连接
   const handleSearch = url => {
     setLoading(true)
@@ -40,18 +42,30 @@ const App = () => {
         const downloadDir = result.filePaths[0]
         console.log(data, downloadDir)
         debugger
+        const dlstack = _.clone(downloadStack)
         for (let downloadInfo of data) {
-          new StreamDownload({
-            id:downloadInfo.key,
-            patchUrl: downloadInfo.url,
-            baseDir: downloadDir,
-            fileName: `${downloadInfo.title}.mp4`
-          }).downloadFile(type => {
-            // console.log(type)
-          })
+          dlstack.push(
+            new StreamDownload({
+              id: downloadInfo.key,
+              patchUrl: downloadInfo.url,
+              baseDir: downloadDir,
+              fileName: `${downloadInfo.title}.mp4`
+            })
+          )
         }
+        debugger
+        if(dlstack[0].status==='0'){
+           dlstack[0].downloadFile()
+           setDownloadingId(dlstack[0].id)
+          }
+        setDownloadStack(dlstack)
       })
   }
+
+  // 监听下载列表的改变
+  // const  handleDownloadStackChange=()=>{
+
+  // }
 
   return (
     <div className="App">
@@ -82,7 +96,7 @@ const App = () => {
         onClose={() => setDrawerVisible(false)}
         getContainer={false}
       >
-        <DownloadList />
+        <DownloadList list={downloadStack} downloadingId={downloadingId} />
       </Drawer>
     </div>
   )
