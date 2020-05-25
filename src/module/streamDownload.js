@@ -15,7 +15,7 @@ class StreamDownload {
     this.patchUrl = patchUrl;
     this.baseDir = baseDir;
     this.fileName = fileName;
-    this.date = new Date().getTime();
+    this.date = Date.now(); // 毫秒时间戳
     this.reqStream = null; //   利用request 创建一个可读流
     this.status = '0'; // 在排队：0 进行中：1  暂停 ：2  错误：3  完成：4  默认在排队中
     this.percentage = 0;
