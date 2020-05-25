@@ -4,7 +4,6 @@ const url = require('url')
 const path = require('path')
 // const Store = require('electron-store');
 const AppWindow = require('./src/AppWindow')
-const StreamDownload = require('./src/module/streamDownload')
 
 let mainWindow = null
 // "http://www.txzqw.me/read-htm-tid-357213.html"
@@ -45,13 +44,9 @@ const createWindow = () => {
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
+  if (mainWindow === null) createWindow()
 })

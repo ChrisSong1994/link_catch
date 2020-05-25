@@ -43,3 +43,16 @@ padding: 10px;
 .App-content  .result-table-button > button{
   margin: 0 10px;
 }
+
+.download-card{
+  margin: 10px 0;
+  font-size: 16px;
+}
+.download-card-btns{
+  margin: 0 10px;
+  text-align: right;
+}
+
+.download-card-btns>i{
+cursor: pointer;
+}
